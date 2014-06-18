@@ -14,43 +14,48 @@ and complete registration.
 
 Now you can initialize the class
 
+```php
 <?php
     require_once 'myjdapi_class.php';
 
     $j = new MYJDAPI();
 ?>
+```
 
 Connect to my.jdownloader.org
 
+```php
 <?php
     require_once 'myjdapi_class.php';
 
     $j = new MYJDAPI();
     $j -> connect( "EMAIL", "PASSWORD");
 ?>
+```
 
 or use this method to initialize the class
 
+```php
 <?php
     require_once 'myjdapi_class.php';
 
     $j = new MYJDAPI( "EMAIL", "PASSWORD");
 ?>
+```
 
-Available methods
-
-connect, reconnect, disconnect, enumerateDevices, getDirectConnectionInfos,
-callAction, addLinks.
+Available methods:  connect, reconnect, disconnect, enumerateDevices,
+getDirectConnectionInfos, callAction, addLinks, and more maybe later.
 
 Add links to jdownloader and start it
 
+```php
 <?php
     require_once 'myjdapi_class.php';
 
     $j = new MYJDAPI( "EMAIL", "PASSWORD");
     $j -> addLinks( "YOUR_DEVICE_NAME", "LINKS", "PACKAGE_NAME");
 ?>
-
+```
 
 Copyright (c) 2014 Anatoliy Kultenko "tofik"
 Released under the BSD License, see http://opensource.org/licenses/BSD-3-Clause
