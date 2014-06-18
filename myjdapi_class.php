@@ -2,7 +2,7 @@
 
 /*
  * My.jdownloader.org API class definition
- * https://github.com/tofika/...
+ * https://github.com/tofika/my.jdownloader.org-api-php-class
  *
  * @author Anatoliy Kultenko "tofik"
  * @license BSD http://opensource.org/licenses/BSD-3-Clause
