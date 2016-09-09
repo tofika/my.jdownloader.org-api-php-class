@@ -58,4 +58,5 @@ Add links to jdownloader and start it
 ```
 
 Copyright (c) 2014 Anatoliy Kultenko "tofik".
+
 Released under the BSD License, see http://opensource.org/licenses/BSD-3-Clause
