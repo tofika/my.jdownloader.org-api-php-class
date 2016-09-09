@@ -129,11 +129,13 @@ class MYJDAPI
 
     // Send links to device using action /linkgrabberv2/addLinks
     // input: device - name of device, links - array or string of links, package_name - custom package name
-    // todo !!! what return: ???
     // {"url":"/linkgrabberv2/addLinks",
     //  "params":["{\"priority\":\"DEFAULT\",\"links\":\"YOURLINK\",\"autostart\":true, \"packageName\": \"YOURPKGNAME\"}"],
     //  "rid":YOURREQUESTID,"apiVer":1}
     public function addLinks( $device, $links, $package_name) {
+        if( !is_array( $this -> devices)) {
+            $this -> enumerateDevices();
+        }
         if( is_array( $links)) {
             $links = implode( ",", $links);
         }
@@ -171,11 +173,8 @@ class MYJDAPI
         }
         $content_json = json_decode( $res, true);
         if( $content_json["rid"] != $this -> rid_counter) {
-            print_r( "error: rid mismatch!\n"); //todo remove after test
             return false;
         }
-        print_r( "url= $url\n"); //todo remove after test
-        print_r( "response= $res\n"); //todo remove after test
         return $res;
     }
 
@@ -208,11 +207,8 @@ class MYJDAPI
         }
         $content_json = json_decode( $res, true);
         if( $content_json["rid"] != $this -> rid_counter) {
-            print_r( "error: rid mismatch!\n"); //todo remove after test
             return false;
         }
-        print_r( "url= $url\n"); //todo remove after test
-        print_r( "response= $res\n"); //todo remove after test
         return $res;
     }
 
