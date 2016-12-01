@@ -166,22 +166,25 @@ class MYJDAPI
 
     // Retrive links
     public function queryLinks($params = []) {
-        //taken from: https://github.com/mmarquezs/My.Jdownloader-API-Python-Library/blob/master/myjdapi.py
+        //taken from: https://docs.google.com/document/d/1IGeAwg8bQyaCTeTl_WyjLyBPh4NBOayO0_MAmvP5Mu4/edit# (LinkQueryStorable)
         $params_default = [
-            "bytesTotal"    => True,
-            "comment"       => True,
-            "status"        => True,
-            "enabled"       => True,
-            "maxResults"    => -1,
-            "startAt"       => 0,
-            "hosts"         => True,
-            "url"           => True,
-            "availability"  => True,
-            "variantIcon"   => True,
-            "variantName"   => True,
-            "variantID"     => True,
-            "variants"      => True,
-            "priority"      => True
+            "bytesTotal" => true,
+            "comment" => true,
+            "status" => true,
+            "enabled" => true,
+            "maxResults" => -1,
+            "startAt" => 0,
+            "packageUUIDs" => null,
+            "host" => true,
+            "url" => true,
+            "bytesLoaded" => true,
+            "speed" => true,
+            "eta" => true,
+            "finished" => true,
+            "priority" => true,
+            "running" => true,
+            "skipped" => true,
+            "extractionStatus" => true
         ];
 
         $params = array_merge($params_default, $params);
