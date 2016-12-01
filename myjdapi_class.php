@@ -10,7 +10,7 @@
 
 class MYJDAPI
 {
-    private $api_url = "http://api.jdownloader.org";
+    private $api_url = "https://api.jdownloader.org";
     private $version = "1.0.18062014";
     private $rid_counter;
     private $appkey = "MYJDAPI_php";
@@ -24,8 +24,9 @@ class MYJDAPI
     private $deviceEncryptionToken;
     private $SERVER_DOMAIN = "server";
     private $DEVICE_DOMAIN = "device";
+    private $device_name = null;
 
-    public function __construct( $email = "", $password = "") {
+    public function __construct( $email = "", $password = "", $device_name = null) {
         $this -> rid_counter = time();
         if( ($email != "") && ($password != "")) {
             $res = $this -> connect( $email, $password);
@@ -33,10 +34,26 @@ class MYJDAPI
                 return false;
             }
         }
+
+        $this->setDeviceName($device_name);
     }
 
     public function getVersion() {
         return $this -> version;
+    }
+
+    //Set device name
+    public function setDeviceName($device_name) {
+        if(!is_null($device_name) && is_string($device_name)) {
+            $this->device_name = $device_name;
+            return true;
+        }
+        return false;
+    }
+
+    //Get device name
+    public function getDeviceName() {
+        return $this->device_name;
     }
 
     // Connect to api.jdownloader.org
@@ -132,7 +149,7 @@ class MYJDAPI
     // {"url":"/linkgrabberv2/addLinks",
     //  "params":["{\"priority\":\"DEFAULT\",\"links\":\"YOURLINK\",\"autostart\":true, \"packageName\": \"YOURPKGNAME\"}"],
     //  "rid":YOURREQUESTID,"apiVer":1}
-    public function addLinks( $device, $links, $package_name) {
+    public function addLinks( $links, $package_name = null) {
         if( !is_array( $this -> devices)) {
             $this -> enumerateDevices();
         }
@@ -140,11 +157,37 @@ class MYJDAPI
             $links = implode( ",", $links);
         }
         $params = '\"priority\":\"DEFAULT\",\"links\":\"'.$links.'\",\"autostart\":true, \"packageName\": \"'.$package_name.'\"';
-        $res = $this -> callAction( $device, "/linkgrabberv2/addLinks", $params);
+        $res = $this -> callAction( "/linkgrabberv2/addLinks", $params);
         if( $res === false) {
             return false;
         }
         return true;
+    }
+
+    // Retrive links
+    public function queryLinks($params = []) {
+        //taken from: https://github.com/mmarquezs/My.Jdownloader-API-Python-Library/blob/master/myjdapi.py
+        $params_default = [
+            "bytesTotal"    => True,
+            "comment"       => True,
+            "status"        => True,
+            "enabled"       => True,
+            "maxResults"    => -1,
+            "startAt"       => 0,
+            "hosts"         => True,
+            "url"           => True,
+            "availability"  => True,
+            "variantIcon"   => True,
+            "variantName"   => True,
+            "variantID"     => True,
+            "variants"      => True,
+            "priority"      => True
+        ];
+
+        $params = array_merge($params_default, $params);
+
+        $res = $this -> callAction( "/downloadsV2/queryLinks", $params);
+        return $res;
     }
     // Make a call to my.jdownloader.org
     // input: query - path+params, key - key for encryption, params - additional params
@@ -181,12 +224,17 @@ class MYJDAPI
     // Make a call to API function on my.jdownloader.org
     // input: device_name - name of device to send action, action - action pathname, params - additional params
     // return: result from server or false
-    public function callAction( $device_name, $action, $params = false) {
+    public function callAction( $action, $params = false) {
+        if( !is_array( $this -> devices)) {
+            $this -> enumerateDevices();
+        }
+
         if( !is_array( $this -> devices) || ( count( $this -> devices) == 0)) {
             return false;
         }
+
         foreach( $this -> devices as $i => &$ivalue) {
-            if( $this -> devices[$i]["name"] == $device_name) {
+            if( $this -> devices[$i]["name"] == $this->getDeviceName()) {
                 $device_id = $this -> devices[$i]["id"];
             }
         }
@@ -195,6 +243,9 @@ class MYJDAPI
         }
         $query = "/t_".urlencode( $this -> sessiontoken)."_".urlencode( $device_id).$action;
         if( $params != "") {
+            if(is_array($params)) {
+                $params = str_replace('"', '\"', substr(json_encode($params),1,-1));
+            }
             $json_data = '{"url":"'.$action.'","params":["{'.$params.'}"],"rid":'.$this -> getUniqueRid().',"apiVer":'.$this -> apiVer.'}';
         } else {
             $json_data = '{"url":"'.$action.'","rid":'.$this -> getUniqueRid().',"apiVer":'.$this -> apiVer.'}';
@@ -296,4 +347,4 @@ class MYJDAPI
         return $response["body"];
     }
 }
-?>
+
