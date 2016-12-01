@@ -30,6 +30,7 @@ Connect to my.jdownloader.org
 
     $j = new MYJDAPI();
     $j -> connect( "EMAIL", "PASSWORD");
+    $j -> setDeviceName("YOUR_DEVICE_NAME");
 ?>
 ```
 
@@ -39,12 +40,12 @@ or use this method to initialize the class
 <?php
     require_once 'myjdapi_class.php';
 
-    $j = new MYJDAPI( "EMAIL", "PASSWORD");
+    $j = new MYJDAPI( "EMAIL", "PASSWORD", "YOUR_DEVICE_NAME");
 ?>
 ```
 
 Available methods:  connect, reconnect, disconnect, enumerateDevices,
-getDirectConnectionInfos, callAction, addLinks, and more maybe later.
+getDirectConnectionInfos, callAction, addLinks, queryLinks and more maybe later.
 
 Add links to jdownloader and start it
 
@@ -52,11 +53,19 @@ Add links to jdownloader and start it
 <?php
     require_once 'myjdapi_class.php';
 
-    $j = new MYJDAPI( "EMAIL", "PASSWORD");
-    $j -> addLinks( "YOUR_DEVICE_NAME", "LINKS", "PACKAGE_NAME");
+    $j = new MYJDAPI( "EMAIL", "PASSWORD", "YOUR_DEVICE_NAME");
+    $j -> addLinks("LINKS", "PACKAGE_NAME");
 ?>
 ```
 
+```php
+<?php
+    require_once 'myjdapi_class.php';
+
+    $j = new MYJDAPI( "EMAIL", "PASSWORD", "YOUR_DEVICE_NAME");
+    $j -> queryLinks();
+?>
+```
 Copyright (c) 2014 Anatoliy Kultenko "tofik".
 
 Released under the BSD License, see http://opensource.org/licenses/BSD-3-Clause
