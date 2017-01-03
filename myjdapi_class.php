@@ -289,27 +289,13 @@ class MYJDAPI
     private function decrypt( $data, $iv_key) {
         $iv = substr( $iv_key, 0, strlen( $iv_key)/2);
         $key = substr( $iv_key, strlen( $iv_key)/2);
-        $dec_data = mcrypt_decrypt( MCRYPT_RIJNDAEL_128, $key, base64_decode( $data), MCRYPT_MODE_CBC, $iv);
-        $dec_data = $this -> pkcs5_unpad( $dec_data);
-        return $dec_data;
+        return openssl_decrypt( base64_decode( $data), "aes-128-cbc", $key, OPENSSL_RAW_DATA, $iv);
     }
 
     private function encrypt( $data, $iv_key) {
-        $data = $this -> pkcs5_pad( $data, mcrypt_get_block_size( MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC));
         $iv = substr( $iv_key, 0, strlen( $iv_key)/2);
         $key = substr( $iv_key, strlen( $iv_key)/2);
-        return base64_encode( mcrypt_encrypt( MCRYPT_RIJNDAEL_128, $key, $data, MCRYPT_MODE_CBC, $iv));
-    }
-    private function pkcs5_pad( $text, $blocksize) {
-        $pad = $blocksize - ( strlen( $text) % $blocksize);
-        return $text.str_repeat( chr( $pad), $pad);
-    }
-
-    private function pkcs5_unpad( $text) {
-        $pad = ord( $text{ strlen( $text)-1});
-        if( $pad > strlen( $text)) return false;
-        if( strspn($text, chr( $pad), strlen( $text) - $pad) != $pad) return false;
-        return substr( $text, 0, -1 * $pad);
+        return base64_encode( openssl_encrypt( $data, "aes-128-cbc", $key, OPENSSL_RAW_DATA, $iv));
     }
 
     private function updateEncryptionToken( $oldToken, $updateToken) {
