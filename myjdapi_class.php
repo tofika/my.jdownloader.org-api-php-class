@@ -10,8 +10,8 @@
 
 class MYJDAPI
 {
-    private $api_url = "https://api.jdownloader.org";
-    private $version = "1.0.18062014";
+    private $api_url = "http://api.jdownloader.org";
+    private $version = "1.0.29092020";
     private $rid_counter;
     private $appkey = "MYJDAPI_php";
     private $apiVer = 1;
@@ -35,7 +35,7 @@ class MYJDAPI
             }
         }
 
-        $this->setDeviceName($device_name);
+        $this -> setDeviceName( $device_name);
     }
 
     public function getVersion() {
@@ -43,9 +43,9 @@ class MYJDAPI
     }
 
     //Set device name
-    public function setDeviceName($device_name) {
-        if(!is_null($device_name) && is_string($device_name)) {
-            $this->device_name = $device_name;
+    public function setDeviceName( $device_name) {
+        if( !is_null( $device_name) && is_string( $device_name)) {
+            $this -> device_name = $device_name;
             return true;
         }
         return false;
@@ -53,7 +53,7 @@ class MYJDAPI
 
     //Get device name
     public function getDeviceName() {
-        return $this->device_name;
+        return $this -> device_name;
     }
 
     // Connect to api.jdownloader.org
@@ -134,7 +134,7 @@ class MYJDAPI
     // return: true or false
     public function getDirectConnectionInfos() {
         foreach( $this -> devices as $i => &$ivalue) {
-            $res = $this -> callAction( $this -> devices[$i]["name"], "/device/getDirectConnectionInfos");
+            $res = $this -> callAction( "/device/getDirectConnectionInfos");
             if( $res === false) {
                 return false;
             }
@@ -165,7 +165,7 @@ class MYJDAPI
     }
 
     // Retrive links
-    public function queryLinks($params = []) {
+    public function queryLinks( $params = []) {
         //taken from: https://docs.google.com/document/d/1IGeAwg8bQyaCTeTl_WyjLyBPh4NBOayO0_MAmvP5Mu4/edit# (LinkQueryStorable)
         $params_default = [
             "bytesTotal" => true,
@@ -187,7 +187,7 @@ class MYJDAPI
             "extractionStatus" => true
         ];
 
-        $params = array_merge($params_default, $params);
+        $params = array_merge( $params_default, $params);
 
         $res = $this -> callAction( "/downloadsV2/queryLinks", $params);
         return $res;
@@ -336,4 +336,3 @@ class MYJDAPI
         return $response["body"];
     }
 }
-
