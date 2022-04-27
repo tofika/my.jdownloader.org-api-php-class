@@ -11,7 +11,7 @@
 class MYJDAPI
 {
     private $api_url = "http://api.jdownloader.org";
-    private $version = "1.0.29092020";
+    private $version = "1.0.20220427";
     private $rid_counter;
     private $appkey = "MYJDAPI_php";
     private $apiVer = 1;
@@ -26,8 +26,12 @@ class MYJDAPI
     private $DEVICE_DOMAIN = "device";
     private $device_name = null;
 
-    public function __construct( $email = "", $password = "", $device_name = null) {
+    public function __construct( $email = "", $password = "", $device_name = null, $appkey = "MYJDAPI_php", $useHTTPS = false) {
+		if ($useHTTPS === true) {
+			$this -> api_url = str_replace('http://', 'https://', $this -> api_url);
+		}
         $this -> rid_counter = time();
+		$this -> appkey = $appkey;
         if( ($email != "") && ($password != "")) {
             $res = $this -> connect( $email, $password);
             if( $res === false) {
@@ -41,6 +45,21 @@ class MYJDAPI
     public function getVersion() {
         return $this -> version;
     }
+
+    //Set AppKey name
+    public function setAppKeyName( $appkey) {
+        if( !is_null( $appkey) && is_string( $appkey)) {
+            $this -> appkey = $appkey;
+            return true;
+        }
+        return false;
+    }
+
+    //Get AppKey name
+    public function getAppKeyName() {
+        return $this -> appkey;
+    }
+
 
     //Set device name
     public function setDeviceName( $device_name) {
